@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat App</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        #messages {
+            list-style-type: none;
+            padding: 0;
+            max-height: 400px;
+            overflow-y: scroll;
+            border: 1px solid #ccc;
+            background: #fff;
+            margin-bottom: 20px;
+        }
+        #messages li {
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        #form {
+            display: none; 
+        }
+        #input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px;
+            border: none;
+            background-color: #28a745;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <h1>Chat Application</h1>
+    <div>
+        <label for="username">Username:</label>
+        <input type="text" id="username" placeholder="Enter your username" />
+    </div>
+    <div>
+        <label for="room">Room:</label>
+        <input type="text" id="room" value="room1" readonly /> 
+    </div>
+    <button id="join">Join Room</button>
+    
+    <ul id="messages"></ul>
+    
+    <form id="form" action="">
+        <input id="input" autocomplete="off" placeholder="Type a message..." />
+        <button>Send</button>
+    </form>
+
+    <script>
+        const socket = io();
+        let currentRoom = '';
+
+        document.getElementById('join').addEventListener('click', () => {
+            const username = document.getElementById('username').value;
+            currentRoom = document.getElementById('room').value;
+            socket.emit('join room', currentRoom);
+            document.getElementById('form').style.display = 'flex'; 
+            document.getElementById('messages').innerHTML = ''; 
+        });
+
+        const form = document.getElementById('form');
+        const input = document.getElementById('input');
+        const messages = document.getElementById('messages');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (input.value) {
+                const msg = {
+                    username: document.getElementById('username').value,
+                    content: input.value,
+                    room: currentRoom
+                };
+                socket.emit('chat message', msg);
+                input.value = '';
+            }
+        });
+
+        socket.on('chat message', function(msg) {
+            const item = document.createElement('li');
+            item.textContent = `${msg.username}: ${msg.content}`;
+            messages.appendChild(item);
+            window.scrollTo(0, document.body.scrollHeight);
+        });
+    </script>
+</body>
+</html>
