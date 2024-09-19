@@ -50,7 +50,7 @@ POST /api/auth/login: Login a user
 
     Request Body:
 
-json
+
 
     {
       "username": "your_username",
@@ -61,7 +61,7 @@ POST /api/chat/message: Send a message
 
     Request Body:
 
-json
+
 
     {
       "username": "your_username",
@@ -72,7 +72,7 @@ json
 GET /api/chat/messages/:room: Get messages from a room
 
 
-json
+
 
         [
           {
