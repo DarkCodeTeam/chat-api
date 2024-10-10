@@ -22,7 +22,7 @@ This is a simple chat API built with Node.js, Express, and Socket.IO. It support
 1. Clone the repository:
 
    ```bash:
-   git clone https://github.com/yourusername/chat-api.git
+   git clone https://github.com/DarkCodeTeam/chat-api.git
    cd chat-api
 2. install:
     ```bash:
